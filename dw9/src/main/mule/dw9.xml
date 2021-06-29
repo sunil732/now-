@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3b059d81-b2ef-46e6-b2a1-b35f00bdde98" >
+		<http:listener-connection host="0.0.0.0" port="8081"/>
+	</http:listener-config>
+	<flow name="dw9Flow" doc:id="824e3de3-c92c-48c0-a966-dad1a3f86bb0" >
+		<http:listener doc:name="Listener" doc:id="466cfc57-6336-4eba-818e-bf91e313e73b" config-ref="HTTP_Listener_config" path="/now"/>
+		<ee:transform doc:name="Transform Message" doc:id="ebe14910-1d78-46d8-8fc8-c9515f741b20" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"firstNanme": "sunil",
+	"lastname" : "bansal",
+	"time": now()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="e86969ee-6417-4957-a9c3-b8bb2faa9f9a" message="#[payload]"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="df223c7e-2604-4faf-855a-396bf2e06c57" />
+	</flow>
+</mule>
